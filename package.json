@@ -1,0 +1,14 @@
+{
+  "name": "taskpicker",
+  "version": "1.0.0",
+  "description": "Task manager with random task picker",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "sql.js": "^1.14.1",
+    "uuid": "^9.0.0"
+  }
+}

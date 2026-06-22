@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskPicker</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <a class="nav-brand" href="#home">🎯 TaskPicker</a>
+    <div class="nav-links">
+      <a href="#home" class="nav-link" data-page="home">Pick</a>
+      <a href="#tasks" class="nav-link" data-page="tasks">Tasks</a>
+      <a href="#categories" class="nav-link" data-page="categories">Categories</a>
+      <a href="#activity" class="nav-link" data-page="activity">Activity</a>
+    </div>
+  </nav>
+
+  <main id="app"></main>
+
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <h3 id="modal-title"></h3>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/modal.js"></script>
+  <script src="/js/pages/home.js"></script>
+  <script src="/js/pages/tasks.js"></script>
+  <script src="/js/pages/categories.js"></script>
+  <script src="/js/pages/activity.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
