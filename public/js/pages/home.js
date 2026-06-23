@@ -14,12 +14,14 @@ const HomePage = {
           <label>Category</label>
           <select id="cat-select"><option value="">Loading…</option></select>
         </div>
+        <!--
         <div class="control-group">
           <label class="toggle-row" for="include-done">
             <input type="checkbox" id="include-done" />
             Include completed tasks
           </label>
         </div>
+        -->
         <div class="pick-btn-wrap">
           <button class="btn btn-primary" id="pick-btn">🎲 Pick a Random Task</button>
         </div>
