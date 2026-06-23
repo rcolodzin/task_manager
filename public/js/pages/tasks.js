@@ -1,5 +1,5 @@
 const TasksPage = {
-  state: { tasks: [], categories: [], showCompleted: false },
+  state: { tasks: [], categories: [], showCompleted: false, selectedCategory: '' },
 
   async render() {
     const app = document.getElementById('app');
@@ -13,6 +13,10 @@ const TasksPage = {
           <button class="tab-btn active" id="tab-active" data-tab="active">Active</button>
           <button class="tab-btn" id="tab-done" data-tab="done">Completed</button>
         </div>
+        <div class="category-filter-group">
+          <select id="category-filter"><option value="">All Categories</option></select>
+          <button class="btn btn-ghost btn-sm hidden" id="clear-category-filter" title="Show all categories">✕ Clear</button>
+        </div>
       </div>
       <div class="card" style="padding:0">
         <div class="table-wrap" id="tasks-table-wrap">
@@ -24,20 +28,43 @@ const TasksPage = {
     document.getElementById('new-task-btn').addEventListener('click', () => this.openForm());
     document.getElementById('tab-active').addEventListener('click', () => this.switchTab(false));
     document.getElementById('tab-done').addEventListener('click', () => this.switchTab(true));
+    document.getElementById('category-filter').addEventListener('change', (e) => {
+      this.state.selectedCategory = e.target.value;
+      this.load();
+    });
+    document.getElementById('clear-category-filter').addEventListener('click', () => {
+      this.state.selectedCategory = '';
+      this.load();
+    });
 
     await this.load();
   },
 
   async load() {
     try {
+      const params = { completed: this.state.showCompleted };
+      if (this.state.selectedCategory) params.category = this.state.selectedCategory;
+
       [this.state.tasks, this.state.categories] = await Promise.all([
-        API.getTasks({ completed: this.state.showCompleted }),
+        API.getTasks(params),
         API.getCategories(),
       ]);
+      this.populateCategoryFilter();
       this.renderTable();
     } catch (e) {
       showToast('Failed to load tasks', 'error');
     }
+  },
+
+  populateCategoryFilter() {
+    const sel = document.getElementById('category-filter');
+    if (!sel) return;
+    sel.innerHTML = '<option value="">All Categories</option>' +
+      this.state.categories.map(c => `<option value="${c.id}">${escHtml(c.name)}</option>`).join('');
+    sel.value = this.state.selectedCategory;
+
+    document.getElementById('clear-category-filter')
+      .classList.toggle('hidden', !this.state.selectedCategory);
   },
 
   switchTab(showCompleted) {
@@ -50,9 +77,15 @@ const TasksPage = {
   renderTable() {
     const wrap = document.getElementById('tasks-table-wrap');
     if (!this.state.tasks.length) {
+      const catName = this.state.selectedCategory
+        ? (this.state.categories.find(c => c.id === this.state.selectedCategory)?.name || 'this category')
+        : null;
+      const emptyMsg = catName
+        ? `No ${this.state.showCompleted ? 'completed' : 'active'} tasks in "${escHtml(catName)}".`
+        : (this.state.showCompleted ? 'No completed tasks yet.' : 'No active tasks. Create your first one!');
       wrap.innerHTML = `<div class="empty-state">
         <div class="empty-icon">${this.state.showCompleted ? '🏁' : '📝'}</div>
-        <p>${this.state.showCompleted ? 'No completed tasks yet.' : 'No active tasks. Create your first one!'}</p>
+        <p>${emptyMsg}</p>
       </div>`;
       return;
     }

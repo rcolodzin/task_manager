@@ -267,6 +267,8 @@ tbody tr:hover { background: var(--surface-2); }
   flex-wrap: wrap;
 }
 .filter-tabs { display: flex; gap: 0.25rem; }
+.category-filter-group { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; }
+.category-filter-group select { min-width: 160px; }
 .tab-btn {
   padding: 0.4rem 0.9rem;
   border-radius: var(--radius-sm);
